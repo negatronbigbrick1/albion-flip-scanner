@@ -1,1 +1,10 @@
-{"name":"Albion Flip Scanner","short_name":"Albion Flip","start_url":"./","display":"standalone","background_color":"#0b1120","theme_color":"#111827","description":"Mobile market flipping scanner for Albion Online","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}
+{
+  "name":"Albion Flip Scanner",
+  "short_name":"Albion Flip",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#0b1120",
+  "theme_color":"#111827",
+  "description":"Mobile market flipping scanner for Albion Online",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]
+}
