@@ -45,3 +45,11 @@ If GitHub shows a conflict or asks whether to replace an existing file, verify t
 The public Albion Online Data Project price snapshot endpoint provides reported minimum sell prices, maximum buy prices, and timestamps. It does not reliably provide live order quantities or full order-book depth. Therefore this version does not pretend to calculate stock or order volume. Verify order quantities, current prices, quality, travel costs, and fees in-game before trading.
 
 This is a browser companion only. It does not read game memory, automate gameplay, or place market orders.
+
+
+LATEST ADJUSTMENTS
+- Item quality now includes All qualities (Normal through Masterpiece).
+- Added Refinement, Crafting, and Breeding categories.
+- The All qualities option requests quality levels 1 to 5 and shows the quality for each result.
+- Some item IDs in the Breeding category may not have recent public price data; missing prices are skipped.
+- Large categories can exceed the 250-item scan limit. Reduce selected tiers or enchantments if prompted.

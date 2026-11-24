@@ -9,6 +9,9 @@ const BAGS = ['BAG','CAPE'];
 const WEAPONS = ['MAIN_SWORD','2H_CLAYMORE','MAIN_AXE','2H_AXE','MAIN_MACE','2H_MACE','MAIN_HAMMER','2H_HAMMER','MAIN_SPEAR','2H_SPEAR','MAIN_DAGGER','2H_DAGGERPAIR','MAIN_CROSSBOW','2H_CROSSBOW','MAIN_BOW','2H_LONGBOW','MAIN_FIRE','2H_FIRE','MAIN_FROST','2H_FROST','MAIN_ARCANESTAFF','2H_ARCANESTAFF','MAIN_HOLYSTAFF','2H_HOLYSTAFF','MAIN_NATURESTAFF','2H_NATURESTAFF','MAIN_CURSEDSTAFF','2H_CURSEDSTAFF','2H_QUARTERSTAFF','2H_IRONCLADEDSTAFF','2H_DOUBLEBLADEDSTAFF','2H_DUALSICKLE','2H_BEARPAWS','2H_SCYTHE','2H_HALBERD','2H_GLAIVE','2H_TRIDENT','2H_BOLTCASTER','2H_WARBOW','2H_WAILINGBOW'];
 const ARMOR = ['HEAD_CLOTH_SET1','HEAD_CLOTH_SET2','HEAD_CLOTH_SET3','ARMOR_CLOTH_SET1','ARMOR_CLOTH_SET2','ARMOR_CLOTH_SET3','SHOES_CLOTH_SET1','SHOES_CLOTH_SET2','SHOES_CLOTH_SET3','HEAD_LEATHER_SET1','HEAD_LEATHER_SET2','HEAD_LEATHER_SET3','ARMOR_LEATHER_SET1','ARMOR_LEATHER_SET2','ARMOR_LEATHER_SET3','SHOES_LEATHER_SET1','SHOES_LEATHER_SET2','SHOES_LEATHER_SET3','HEAD_PLATE_SET1','HEAD_PLATE_SET2','HEAD_PLATE_SET3','ARMOR_PLATE_SET1','ARMOR_PLATE_SET2','ARMOR_PLATE_SET3','SHOES_PLATE_SET1','SHOES_PLATE_SET2','SHOES_PLATE_SET3'];
 const MOUNTS = ['MOUNT_HORSE','MOUNT_OX','MOUNT_ARMORED_HORSE','MOUNT_GIANTSTAG','MOUNT_DIREWOLF','MOUNT_DIREBOAR','MOUNT_DIREBEAR','MOUNT_SWAMPDRAGON','MOUNT_MOABIRD','MOUNT_GREYWOLF'];
+const BREEDING = ['BABY_HORSE','BABY_OX','BABY_ARMORED_HORSE','BABY_GIANTSTAG','BABY_DIREWOLF','BABY_DIREBOAR','BABY_DIREBEAR','BABY_SWAMPDRAGON','BABY_MOABIRD','BABY_GREYWOLF',...MOUNTS];
+const CRAFTING = [...new Set([...BAGS,...WEAPONS,...ARMOR,...['2H_PICKAXE','2H_SKINNINGKNIFE','2H_FISHINGROD','2H_SICKLE','2H_HAMMER']])];
+const REFINEMENT = RESOURCES;
 const CONSUMABLES = ['MEAL_PIE','MEAL_OMELETTE','MEAL_ROAST','MEAL_SALAD','MEAL_SOUP','POTION_HEAL','POTION_ENERGY','POTION_REVIVE','POTION_CLEANSE','POTION_RESISTANCE','POTION_STONESKIN','POTION_INVISIBILITY'];
 const fmt = n => Math.round(Number(n)||0).toLocaleString();
 const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -23,12 +26,15 @@ function selectedEnchants(){ return selectedValues($('enchantments')); }
 function categoryBases(){
   switch($('category').value){
     case 'resources': return RESOURCES;
+    case 'refinement': return REFINEMENT;
+    case 'crafting': return CRAFTING;
+    case 'breeding': return BREEDING;
     case 'bags': return BAGS;
     case 'weapons': return WEAPONS;
     case 'armor': return ARMOR;
     case 'mounts': return MOUNTS;
     case 'consumables': return CONSUMABLES;
-    case 'all': return [...new Set([...STARTER,...WEAPONS,...ARMOR,...MOUNTS,...CONSUMABLES])];
+    case 'all': return [...new Set([...STARTER,...WEAPONS,...ARMOR,...MOUNTS,...CONSUMABLES,...REFINEMENT,...CRAFTING,...BREEDING])];
     case 'custom': return [];
     default: return STARTER;
   }
@@ -84,23 +90,23 @@ function updateModeUI(){
 }
 function buildUrl(ids, locations){
   const server=$('server').value;
-  return `https://${server}.albion-online-data.com/api/v2/stats/prices/${ids.map(encodeURIComponent).join(',')}.json?locations=${encodeURIComponent(locations.join(','))}&qualities=${encodeURIComponent($('quality').value)}`;
+  return `https://${server}.albion-online-data.com/api/v2/stats/prices/${ids.map(encodeURIComponent).join(',')}.json?locations=${encodeURIComponent(locations.join(','))}&qualities=${encodeURIComponent($('quality').value==='all'?'1,2,3,4,5':$('quality').value)}`;
 }
 function createRoutes(rows, ids, cities){
   const mode=$('mode').value, destination=currentMode();
   const byKey=new Map();
   for(const row of rows){
     if(!row || !row.item_id || !row.city) continue;
-    byKey.set(`${row.item_id}|${row.city}|${row.quality||$('quality').value}`,row);
+    byKey.set(`${row.item_id}|${row.city}|${row.quality||1}`,row);
   }
   const tax=Math.max(0,Math.min(100,Number($('tax').value)||0))/100;
   const minProfit=Math.max(0,Number($('minProfit').value)||0);
   const minRoi=Math.max(0,Number($('minRoi').value)||0);
   const maxAge=Math.max(0,Number($('maxAge').value)||0);
-  const q=$('quality').value, found=[];
+  const qualitySelection=$('quality').value, qualities=qualitySelection==='all'?[1,2,3,4,5]:[Number(qualitySelection)], found=[];
   for(const item of ids){
     const possibleBuyCities = cities;
-    for(const buyCity of possibleBuyCities){
+    for(const q of qualities) for(const buyCity of possibleBuyCities){
       const buyRow=byKey.get(`${item}|${buyCity}|${q}`);
       if(!buyRow) continue;
       const buy=Number(buyRow.sell_price_min)||0;
