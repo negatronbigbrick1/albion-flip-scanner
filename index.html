@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827"><meta name="description" content="Mobile Albion Online market flipping scanner">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
+<title>Albion Flip Scanner</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="brand"><span class="logo">AF</span><div><h1>Albion Flip</h1><small>Market opportunity scanner</small></div></div><span id="status" class="status">Ready</span></header>
+<main>
+<section class="intro"><h2>Find your next flip.</h2><p>Compare city markets and estimate returns. Market snapshots may be delayed or incomplete.</p></section>
+<section class="controls panel">
+<div class="field"><label for="server">Server</label><select id="server"><option value="east">Asia (East)</option><option value="west">Americas (West)</option><option value="europe">Europe</option></select></div>
+<div class="field"><label for="tax">Estimated selling fee (%)</label><input id="tax" type="number" value="8" min="0" max="100" step="0.1"></div>
+<div class="field"><label for="minProfit">Minimum profit (silver)</label><input id="minProfit" type="number" value="1000" min="0"></div>
+<div class="field"><label for="minRoi">Minimum ROI (%)</label><input id="minRoi" type="number" value="5" min="0" step="0.1"></div>
+<div class="field full"><label for="cities">Cities</label><select id="cities" multiple size="7"><option selected>Bridgewatch</option><option selected>Fort Sterling</option><option selected>Lymhurst</option><option selected>Martlock</option><option selected>Thetford</option><option selected>Caerleon</option><option>Brecilien</option></select><small>Tap to select or deselect cities. Compare only selected cities.</small></div>
+<div class="field full"><label for="category">Item list</label><select id="category"><option value="starter">Starter watchlist</option><option value="resources">Resources</option><option value="bags">Bags & capes</option><option value="custom">Custom item IDs</option></select></div>
+<div id="customWrap" class="field full hidden"><label for="customItems">Custom Albion item IDs (comma-separated)</label><textarea id="customItems" placeholder="T4_BAG,T5_BAG,T6_BAG"></textarea></div>
+<div class="actions full"><button id="scan" class="primary">Scan market</button><button id="clear" class="secondary">Clear results</button></div>
+</section>
+<section class="panel resultpanel"><div class="resulthead"><div><h3>Opportunities</h3><p id="summary">Run a scan to compare selected markets.</p></div><div class="field sortfield"><label for="sort">Sort by</label><select id="sort"><option value="profit">Net profit</option><option value="roi">ROI</option></select></div></div><div id="results" class="results"><div class="empty"><span>⌕</span><b>No scan yet</b><p>Choose your settings and scan.</p></div></div></section>
+<section class="notes"><h3>How to read results</h3><ul><li><b>Buy at:</b> the city with the lowest current sell listing price.</li><li><b>Sell at:</b> the city with the highest buy order price.</li><li><b>Net profit:</b> estimated sell proceeds after your fee minus buy cost.</li><li>Prices are snapshots. Confirm prices, order volume, item quality, and fees in-game before committing silver.</li></ul></section>
+<footer>Unofficial community tool. Not affiliated with Sandbox Interactive.</footer>
+</main><script src="app.js"></script>
+</body></html>
